@@ -55,7 +55,7 @@ local function hoe_on_use(itemstack, user, pointed_thing, uses)
 	return itemstack
 end
 
-local function get_recipe(c, name)
+function get_recipe(c, name)
 	if name == "sword" then
 		return {{c}, {c}, {"group:stick"}}
 	end
@@ -78,8 +78,8 @@ local function get_recipe(c, name)
 		return {{"group:wood", "group:wood", "group:wood"}, {"group:wood", c, "group:wood"}, {"group:wood", "group:wood", "group:wood"}}
 	end
 end
-
-local function add_ore(modname, description, mineral_name, oredef)
+--make this global for other mods
+function add_ore(modname, description, mineral_name, oredef)
 	local img_base = modname .. "_" .. mineral_name
 	local toolimg_base = modname .. "_tool_"..mineral_name
 	local tool_base = modname .. ":"
