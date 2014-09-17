@@ -1,9 +1,9 @@
 --make magic hoe, which can be used infinitely, but if a player tries to auto harves crops with not enough essence, then the hoe breaks
 --essence using moreores api
 local chunk_size = 11
-local ore_per_chunk = 10
+local ore_per_chunk = 2
 local min_depth = -31000
-local max_depth = 400
+local max_depth = -200 --maybe make this deeper eventually
 local modname = "magic"
 local oredefs = {
 	essence = {
@@ -26,11 +26,12 @@ minetest.override_item("magic:mineral_essence", {
 	drop = "",
 	after_dig_node = function(pos)
 		print("drop essence orbs")
-		minetest.sound_play("sparkle", {
-			pos = pos,
-			max_hear_distance = 10,
-			gain = 1.0,
-		})
+		--play whoosh sound
+		--minetest.sound_play("sparkle", {
+		--	pos = pos,
+		--	max_hear_distance = 10,
+		--	gain = 1.0,
+		--})
 	end,
 })
 
@@ -43,7 +44,7 @@ minetest.register_abm({
 		local minpos = {x=pos.x-0.7,y=pos.y-0.7,z=pos.z-0.7}
 		local maxpos = {x=pos.x+0.7,y=pos.y+0.7,z=pos.z+0.7}
 		local spawner = minetest.add_particlespawner({
-			amount = 10,
+			amount = 20,
 			time = 1,
 			minpos = minpos,
 			maxpos = maxpos,
@@ -58,6 +59,20 @@ minetest.register_abm({
 			collisiondetection = false,
 			vertical = false,
 			texture = "sparkle.png",
+		})
+
+	end,
+})
+minetest.register_abm({
+	nodenames = {"magic:mineral_essence"},
+	neighbors = {"air"},
+	interval = 10,
+	chance = 2,
+	action = function(pos, node)
+		minetest.sound_play("sparkle", {
+			pos = pos,
+			max_hear_distance = 10,
+			gain = 1.0,
 		})
 	end,
 })
