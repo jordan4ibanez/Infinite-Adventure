@@ -44,7 +44,7 @@ minetest.register_abm({
 		local minpos = {x=pos.x-0.7,y=pos.y-0.7,z=pos.z-0.7}
 		local maxpos = {x=pos.x+0.7,y=pos.y+0.7,z=pos.z+0.7}
 		local spawner = minetest.add_particlespawner({
-			amount = 20,
+			amount = 10,
 			time = 1,
 			minpos = minpos,
 			maxpos = maxpos,
