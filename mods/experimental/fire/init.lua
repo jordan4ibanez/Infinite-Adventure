@@ -1,4 +1,5 @@
 fire = {}
+
 fire.top    = {-0.5,0.48,-0.5,0.5,0.48,0.5}
 fire.bottom = {-0.5,-0.48,-0.5,0.5,-0.48,0.5}
 fire.left   = {0.48,-0.5,-0.5,0.48,0.5,0.5}
@@ -7,14 +8,13 @@ fire.front  = {-0.5,-0.5,0.48,0.5,0.5,0.48}
 fire.back   = {-0.5,-0.5,-0.48,0.5,0.5,-0.48}
 
 function fire.check_state(pos)
-	print("checking state at"..minetest.pos_to_string(pos))
+	--print("checking state at"..minetest.pos_to_string(pos))
 	local x = pos.x
 	local y = pos.y
 	local z = pos.z
 	local state = ""
-	--check for everything
-	
 	--ALSO CHECK FOR FLAMABILITY!
+	--Make this use voxel api instead
 	local a = minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z}).name
 	if a ~= "air" and minetest.get_node_group(a, "fire") == 0 then
 		state = state.."1"
@@ -143,11 +143,13 @@ for a = 0,1 do
 		end
 	end	
 end
+
+--make a function for this to only check up down left right front back to burn
 minetest.register_abm({
 	nodenames = {"group:flammable"},
 	neighbors = {"group:fire"},
 	interval = 1,
-	chance = 10,
+	chance = 5,
 	action = function(pos, node)
 		if math.random() < 0.5 then
 			return
