@@ -75,6 +75,14 @@ minetest.register_node("farming:desert_sand_soil", {
 	is_ground_content = true,
 	groups = {crumbly=3, not_in_creative_inventory = 1, falling_node=1, sand=1, soil = 2, desert = 1, field = 1},
 	sounds = default.node_sound_sand_defaults(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5,-0.5,-0.5,0.5,0.45,0.5},
+		},
+	},
 	soil = {
 		base = "default:desert_sand",
 		dry = "farming:desert_sand_soil",
@@ -89,6 +97,14 @@ minetest.register_node("farming:desert_sand_soil_wet", {
 	is_ground_content = true,
 	groups = {crumbly=3, falling_node=1, sand=1, not_in_creative_inventory=1, soil=3, wet = 1, desert = 1, field = 1},
 	sounds = default.node_sound_sand_defaults(),
+	drawtype = "nodebox",
+	paramtype = "light",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5,-0.5,-0.5,0.5,0.45,0.5},
+		},
+	},
 	soil = {
 		base = "default:desert_sand",
 		dry = "farming:desert_sand_soil",
