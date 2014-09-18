@@ -7,58 +7,67 @@ fire.right  = {-0.48,-0.5,-0.5,-0.48,0.5,0.5}
 fire.front  = {-0.5,-0.5,0.48,0.5,0.5,0.48}
 fire.back   = {-0.5,-0.5,-0.48,0.5,0.5,-0.48}
 
-function fire.check_state(pos)
-	--print("checking state at"..minetest.pos_to_string(pos))
-	local x = pos.x
-	local y = pos.y
-	local z = pos.z
+--update fire state
+function fire.update_state(pos)
+	--make check for 000000 and remove auto
+	local min = {x=pos.x-1,y=pos.y-1,z=pos.z-1}
+	local max = {x=pos.x+1,y=pos.y+1,z=pos.z+1}
+	local vm = minetest.get_voxel_manip()	
+	local emin, emax = vm:read_from_map(min,max)
+	local area = VoxelArea:new{MinEdge=emin, MaxEdge=emax}
+	local data = vm:get_data()	
+	local oldstate = vm:get_node_at({x=pos.x,y=pos.y,z=pos.z}).name
+	
 	local state = ""
 	--ALSO CHECK FOR FLAMABILITY!
 	--Make this use voxel api instead
-	local a = minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z}).name
+	local a = vm:get_node_at({x=pos.x,y=pos.y+1,z=pos.z}).name
 	if a ~= "air" and minetest.get_node_group(a, "fire") == 0 then
 		state = state.."1"
 	else 
 		state = state.."0"
 	end
-	
-	local b = minetest.get_node({x=pos.x,y=pos.y-1,z=pos.z}).name
+	local b = vm:get_node_at({x=pos.x,y=pos.y-1,z=pos.z}).name
 	if b ~= "air" and minetest.get_node_group(b, "fire") == 0 then
 		state = state.."1"
 	else 
 		state = state.."0"
 	end
-	
-	
-	
-	local c = minetest.get_node({x=pos.x+1,y=pos.y,z=pos.z}).name
+	local c = vm:get_node_at({x=pos.x+1,y=pos.y,z=pos.z}).name
 	if c ~= "air" and minetest.get_node_group(c, "fire") == 0 then
 		state = state.."1"
 	else 
 		state = state.."0"
 	end
-	
-	local d = minetest.get_node({x=pos.x-1,y=pos.y,z=pos.z}).name
+	local d = vm:get_node_at({x=pos.x-1,y=pos.y,z=pos.z}).name
 	if d ~= "air" and minetest.get_node_group(d, "fire") == 0 then
 		state = state.."1"
 	else 
 		state = state.."0"
 	end
-	
-	local e = minetest.get_node({x=pos.x,y=pos.y,z=pos.z+1}).name
+	local e = vm:get_node_at({x=pos.x,y=pos.y,z=pos.z+1}).name
 	if e ~= "air" and minetest.get_node_group(e, "fire") == 0 then
 		state = state.."1"
 	else 
 		state = state.."0"
 	end
-	
-	local f = minetest.get_node({x=pos.x,y=pos.y,z=pos.z-1}).name
+	local f = vm:get_node_at({x=pos.x,y=pos.y,z=pos.z-1}).name
 	if f ~= "air" and minetest.get_node_group(f, "fire") == 0 then
 		state = state.."1"
 	else 
 		state = state.."0"
 	end
-	return(state)
+	
+	if "fire:fire_"..state == oldstate then
+		return
+	end
+	local newfire = minetest.get_content_id("fire:fire_"..state)
+	local p_pos = area:index(pos.x, pos.y, pos.z)
+	data[p_pos] = newfire
+	vm:set_data(data)
+	vm:write_to_map()
+	vm:update_map()	
+	
 end
 
 function fire.update_surrounding(pos)
@@ -110,23 +119,8 @@ for a = 0,1 do
 							groups = {igniter=2,dig_immediate=3,hot=3,fire=1},
 							drop = '',
 							on_construct = function(pos)
-								local state = fire.check_state(pos)
-								if state ~= nil then
-									if state == "000000" then
-										minetest.remove_node(pos)
-										return
-									end
-								end
-								if state ~= nil and state ~= a..b..c..d..e..f then
-									minetest.set_node(pos, {name="fire:fire_"..state})
-								end
-							end,
-							on_punch = function(pos)
-								local state = fire.check_state(pos)
-								if state ~= nil and state ~= a..b..c..d..e..f then
-									minetest.set_node(pos, {name="fire:fire_"..state})
-								end						
-							end,								
+								fire.update_state(pos)
+							end,							
 							walkable = false,
 							buildable_to = true,
 							-- Make the fire entity hurt the player instead
@@ -146,18 +140,15 @@ end
 
 --make a function for this to only check up down left right front back to burn
 minetest.register_abm({
-	nodenames = {"group:flammable"},
-	neighbors = {"group:fire"},
+	--nodenames = {"group:flammable"},
+	nodenames = {"group:fire"},
+	--neighbors = {"group:fire"},
 	interval = 1,
-	chance = 5,
+	chance = 1,
 	action = function(pos, node)
-		if math.random() < 0.5 then
-			return
-		end
-		local state = fire.check_state(pos)
-		if state ~= nil then
-			minetest.set_node(pos, {name="fire:fire_"..state})
-			fire.update_surrounding(pos)
-		end
+		fire.update_state(pos)
+		--if math.random() < 0.5 then
+		--	return
+		--end
 	end,
 })
