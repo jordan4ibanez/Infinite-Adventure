@@ -19,40 +19,39 @@ function fire.update_state(pos)
 	local oldstate = vm:get_node_at({x=pos.x,y=pos.y,z=pos.z}).name
 	
 	local state = ""
-	--ALSO CHECK FOR FLAMABILITY!
-	--Make this use voxel api instead
+	
 	local a = vm:get_node_at({x=pos.x,y=pos.y+1,z=pos.z}).name
-	if a ~= "air" and minetest.get_node_group(a, "fire") == 0 then
+	if a ~= "air" and minetest.get_node_group(a, "fire") == 0 and minetest.get_item_group(a, "flammable") ~= 0 then
 		state = state.."1"
 	else 
 		state = state.."0"
 	end
 	local b = vm:get_node_at({x=pos.x,y=pos.y-1,z=pos.z}).name
-	if b ~= "air" and minetest.get_node_group(b, "fire") == 0 then
+	if b ~= "air" and minetest.get_node_group(b, "fire") == 0 and minetest.get_item_group(b, "flammable") ~= 0 then
 		state = state.."1"
 	else 
 		state = state.."0"
 	end
 	local c = vm:get_node_at({x=pos.x+1,y=pos.y,z=pos.z}).name
-	if c ~= "air" and minetest.get_node_group(c, "fire") == 0 then
+	if c ~= "air" and minetest.get_node_group(c, "fire") == 0 and minetest.get_item_group(c, "flammable") ~= 0 then
 		state = state.."1"
 	else 
 		state = state.."0"
 	end
 	local d = vm:get_node_at({x=pos.x-1,y=pos.y,z=pos.z}).name
-	if d ~= "air" and minetest.get_node_group(d, "fire") == 0 then
+	if d ~= "air" and minetest.get_node_group(d, "fire") == 0 and minetest.get_item_group(d, "flammable") ~= 0 then
 		state = state.."1"
 	else 
 		state = state.."0"
 	end
 	local e = vm:get_node_at({x=pos.x,y=pos.y,z=pos.z+1}).name
-	if e ~= "air" and minetest.get_node_group(e, "fire") == 0 then
+	if e ~= "air" and minetest.get_node_group(e, "fire") == 0 and minetest.get_item_group(e, "flammable") ~= 0 then
 		state = state.."1"
 	else 
 		state = state.."0"
 	end
 	local f = vm:get_node_at({x=pos.x,y=pos.y,z=pos.z-1}).name
-	if f ~= "air" and minetest.get_node_group(f, "fire") == 0 then
+	if f ~= "air" and minetest.get_node_group(f, "fire") == 0 and minetest.get_item_group(f, "flammable") ~= 0 then
 		state = state.."1"
 	else 
 		state = state.."0"
@@ -66,8 +65,7 @@ function fire.update_state(pos)
 	data[p_pos] = newfire
 	vm:set_data(data)
 	vm:write_to_map()
-	vm:update_map()	
-	
+	vm:update_map()
 end
 
 function fire.update_surrounding(pos)
