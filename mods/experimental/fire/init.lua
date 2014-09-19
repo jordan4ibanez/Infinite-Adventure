@@ -10,20 +10,20 @@ Fire entity{
 fire = {}
 dofile(minetest.get_modpath("fire").."/functions.lua")
 
-local rate = 3 -- higher the less chance of spreading (abm)1-infinity
-
-
---spread fire
+--light stuff on fire
 minetest.register_abm({
 	nodenames = {"group:flammable"},
 	neighbors = {"group:fire"},
 	interval = 1,
-	chance = rate,
+	chance = 10,
 	action = function(pos, node)
 		if math.random() < 0.5 then
 			return
 		end
-		minetest.set_node(pos, {name="fire:fire_010000"})
+		local state = fire.check_state(pos)
+		if state ~= nil and state ~= "000000" then
+			minetest.set_node(pos, {name="fire:fire_"..state})
+		end
 	end,
 })
 
@@ -33,6 +33,11 @@ minetest.register_abm({
 	interval = 1,
 	chance = 1,
 	action = function(pos, node)
-		fire.update_state(pos)
+		local newstate = fire.check_state(pos)
+		if newstate ~= nil and newstate ~= "000000" then
+			minetest.set_node(pos, {name="fire:fire_"..newstate})
+		elseif newstate == "000000" then
+			minetest.remove_node(pos)
+		end
 	end,
 })
