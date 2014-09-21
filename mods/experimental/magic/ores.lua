@@ -28,7 +28,7 @@ end
 minetest.override_item("magic:mineral_essence", {
 	drop = "",
 	after_dig_node = function(pos)
-		drop_essence(pos, 50)	
+		drop_essence(pos, math.random(3,5))	
 		minetest.sound_play("sparkle", {
 			pos = pos,
 			max_hear_distance = 10,
@@ -36,15 +36,19 @@ minetest.override_item("magic:mineral_essence", {
 		})
 	end,
 })
+
+--disable this for now to prevent lag
+--[[
 minetest.register_abm({
 	nodenames = {"magic:mineral_essence"},
 	neighbors = {"air"},
-	interval = 1,
+	interval = 60,
 	chance = 1,
 	action = function(pos, node)
 		set_sparkles(pos)
 	end,
 })
+]]--
 --make essence ding
 minetest.register_abm({
 	nodenames = {"magic:mineral_essence"},
