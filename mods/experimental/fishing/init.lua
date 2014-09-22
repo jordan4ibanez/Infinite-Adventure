@@ -28,6 +28,11 @@ minetest.register_craftitem("fishing:fishing_pole", {
 			lure:setvelocity({x=dir.x,y=dir.y,z=dir.z})
 			lure:get_luaentity().owner = user:get_player_name()
 			fishing[user:get_player_name()] = lure
+			minetest.sound_play("cast", {
+				pos = pos,
+				max_hear_distance = 10,
+				gain = 1.0,
+			})
 		else
 			print("fishing fail")
 		end
@@ -57,19 +62,32 @@ minetest.register_globalstep(function(dtime)
 						--make this start reeling upwards if below a certain distance
 						fishing[player:get_player_name()]:setvelocity({x=x,y=0,z=z})
 						fishing[player:get_player_name()]:get_luaentity().reeling = true
+						--make this not overlap
+						minetest.sound_play("reel", {
+							pos = pos1,
+							max_hear_distance = 10,
+							gain = 1.0,
+						})
 					end
 				end
 			end
 		end
 		--collect lure/bait
 		for _,object in ipairs(minetest.env:get_objects_inside_radius(pos, 2)) do
-			if not object:is_player() and object:get_luaentity() and object:get_luaentity().name == "fishing:lure"  then
+			if not object:is_player() and object:get_luaentity() and object:get_luaentity().name == "fishing:lure" and object:get_luaentity().casting == false and object:get_luaentity().collected == false then
 				if object:get_luaentity().owner == player:get_player_name() then
 					--possibly have this drop a lure in the water instead
 					local inv = player:get_inventory()
 					if inv and inv:room_for_item("main", "default:stone") then
 						inv:add_item("main", "default:stone")
 						object:remove()
+						fishing[player:get_player_name()] = nil
+						minetest.sound_play("collect_lure", {
+							pos = pos,
+							max_hear_distance = 10,
+							gain = 1.0,
+						})
+						object:get_luaentity().collected = true
 					end
 				end
 			end
@@ -83,6 +101,7 @@ minetest.register_entity("fishing:lure", {
 	collide_with_objects = false,
 	casting = true,
 	reeling = false,
+	collected = false,
 	textures = {"default_stone.png"},
 	lastpos = nil,
 	owner   = nil,
