@@ -1,6 +1,8 @@
 levels = {}
 
 dofile(minetest.get_modpath("magic").."/functions.lua")
+dofile(minetest.get_modpath("magic").."/wands.lua")
+dofile(minetest.get_modpath("magic").."/nodes.lua")
 dofile(minetest.get_modpath("magic").."/entities.lua")
 dofile(minetest.get_modpath("magic").."/ores.lua")
 

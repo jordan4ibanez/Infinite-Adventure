@@ -2,3 +2,5 @@ sparkle http://freesound.org/people/ikonochris/sounds/213380/
 Whispers are me saying "booga booga" "happy halloween" and "merry christmas"
 level up: http://freesound.org/people/303creative/sounds/42202/
 essence: http://www.freesound.org/people/partymix/sounds/24102/
+enchant: http://freesound.org/people/qubodup/sounds/202147/
+disenchant: http://freesound.org/people/qubodup/sounds/202148/
