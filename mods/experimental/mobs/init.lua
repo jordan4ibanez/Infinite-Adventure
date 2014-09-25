@@ -79,6 +79,7 @@ minetest.register_entity("mobs:test", {
 			else
 				jump_test.x = pos.x - 0.6
 			end
+			
 			if vel.z > 0 then
 				jump_test.z = pos.z + 0.6
 			else
