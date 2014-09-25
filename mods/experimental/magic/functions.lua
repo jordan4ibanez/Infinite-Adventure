@@ -1,7 +1,7 @@
 essence_drop_velocity = 2
 function drop_essence(pos, amount)
 	for i = 1,amount do
-		local essence = minetest.env:add_entity(pos, "magic:essence")
+		local essence = minetest.add_entity(pos, "magic:essence")
 		--Make this as random as possible
 		essence:get_luaentity().timer = 0
 		essence:setvelocity({x=math.random(-essence_drop_velocity,essence_drop_velocity)+(math.random()*math.random(-3,3)),y=math.random(1,4),z=math.random(-essence_drop_velocity,essence_drop_velocity)+(math.random()*math.random(-3,3))})

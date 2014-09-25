@@ -4,7 +4,8 @@ minetest.register_craftitem("magic:apprentice_wand", {
 	inventory_image = "apprentice_wand.png^[transformFX",
 	stack_max = 1,
 	on_use = function(itemstack, user, pointed_thing)
-		if pointed_thing.type ~= "nothing" then
+		--make this require 20 essence
+		if pointed_thing.type == "node" then
 			if minetest.get_node(pointed_thing.under).name == "default:bookshelf" then
 				local pos1 = user:getpos()
 				local pos2 = pointed_thing.under
