@@ -52,7 +52,7 @@ minetest.register_globalstep(function(dtime)
 		local pos = player:getpos()
 		pos.y = pos.y+0.5
 		local inv = player:get_inventory()
-		for _,object in ipairs(minetest.env:get_objects_inside_radius(pos, 0.8)) do
+		for _,object in ipairs(minetest.env:get_objects_inside_radius(pos, 0.2)) do
 			if not object:is_player() and object:get_luaentity() and object:get_luaentity().name == "__builtin:item" then
 				if inv:room_for_item("main", ItemStack(object:get_luaentity().itemstring)) then
 					if object:get_luaentity().timer > lua_entity_drop_pickup_timer then
@@ -81,9 +81,9 @@ minetest.register_globalstep(function(dtime)
 								local pos2 = object:getpos()
 								local vec = {x=pos1.x-pos2.x, y=pos1.y-pos2.y, z=pos1.z-pos2.z}
 								--make the lower distance into higher distance
-								vec.x = vec.x * (8 - math.abs(vec.x))
-								vec.y = vec.y * (8 - math.abs(vec.y))
-								vec.z = vec.z * (8 - math.abs(vec.z))
+								vec.x = vec.x * (10 - math.abs(vec.x))
+								vec.y = vec.y * (10 - math.abs(vec.y))
+								vec.z = vec.z * (10 - math.abs(vec.z))
 								object:setvelocity(vec)
 								object:setacceleration({x=0, y=0, z=0})
 								object:get_luaentity().is_flying = true
