@@ -1,9 +1,10 @@
+--[[
 --this is a mod which brings in carvable pumpkins
 
 local pumpkin = 0
 --generate pumpkin pixel by pixel
 --this is insanity
---[[
+
 for a = 0,1 do
 for b = 0,1 do
 for c = 0,1 do
